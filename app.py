@@ -22,7 +22,6 @@ def fetch_poster(movie_id):
     except Exception as e:
         print(f"Error fetching poster: {e}") # Log error for debugging
     return "https://via.placeholder.com/500x750.png?text=No+Poster+Found"
-
 # --- Function to load saved model assets ---
 @st.cache_resource
 def load_model_assets():
@@ -52,7 +51,6 @@ def get_recommendations(title, movies_df, cosine_sim):
     sim_scores = sim_scores[1:11]
     movie_indices = [i[0] for i in sim_scores]
     return movies_df['title'].iloc[movie_indices], movies_df['id'].iloc[movie_indices]
-
 # --- Custom CSS and UI ---
 st.markdown("""
 <style>
@@ -90,3 +88,7 @@ if movies_df is not None and cosine_sim is not None:
                             st.image(fetch_poster(rec_ids.iloc[i]))
                             st.markdown(f"<p class='movie-title'>{rec_titles.iloc[i]}</p>", unsafe_allow_html=True)
                 else:
+                    st.warning("Could not find any similar movies.")
+else:
+    st.error("🚨 Model files not found!")
+    st.warning("Please run the updated training script first.")
